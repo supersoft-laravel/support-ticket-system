@@ -84,10 +84,10 @@
                                         @canany(['view ticket'])
                                             <span class="text-nowrap">
                                                 <a href="{{ route('dashboard.tickets.show', $ticket->id) }}"
-                                                    class="btn btn-icon btn-text-primary waves-effect waves-light rounded-pill me-1 edit-ticket-btn"
+                                                    class="btn btn-icon btn-text-warning waves-effect waves-light rounded-pill me-1 edit-ticket-btn"
                                                     data-bs-toggle="tooltip" data-bs-placement="top"
-                                                    title="{{ __('Ticket Comments') }}">
-                                                    <i class="ti ti-edit ti-md"></i>
+                                                    title="{{ __('View Ticket Details') }}">
+                                                    <i class="ti ti-eye ti-md"></i>
                                                 </a>
                                             </span>
                                         @endcan

@@ -80,7 +80,16 @@ class TicketController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $this->authorize('delete ticket');
+        try {
+            $ticket = Ticket::findOrFail($id);
+            $ticket->delete();
+
+            return redirect()->route('dashboard.tickets.index')->with('success', 'Ticket deleted successfully!');
+        } catch (\Throwable $th) {
+            Log::error("Ticket Delete Failed:" . $th->getMessage());
+            return redirect()->back()->with('error', 'Something went wrong! Please try again later');
+        }
     }
 
     public function updateStatus(Request $request, $id)
