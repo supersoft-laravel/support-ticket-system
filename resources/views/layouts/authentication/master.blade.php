@@ -16,17 +16,22 @@
 <body>
     <!-- Content -->
 
-    <div class="authentication-wrapper authentication-cover">
-        <!-- Logo -->
-        <a href="" class="app-brand auth-cover-brand">
-            <span class="app-brand-logo demo">
-                <img src="{{ asset(\App\Helpers\Helper::getLogoLight()) }}" alt="{{\App\Helpers\Helper::getCompanyName()}}">
-            </span>
-            <span class="app-brand-text demo text-heading fw-bold">{{\App\Helpers\Helper::getCompanyName()}}</span>
-        </a>
-        <!-- /Logo -->
-        <div class="authentication-inner row m-0">
+    <div class="container-xxl">
+        <div class="authentication-wrapper authentication-basic container-p-y">
             @yield('content')
+            <!-- Logo -->
+            {{-- <a href="" class="app-brand auth-cover-brand">
+                <span class="app-brand-logo demo">
+                    <img src="{{ asset(\App\Helpers\Helper::getLogoLight()) }}"
+                        alt="{{ \App\Helpers\Helper::getCompanyName() }}">
+                </span>
+                <span
+                    class="app-brand-text demo text-heading fw-bold">{{ \App\Helpers\Helper::getCompanyName() }}</span>
+            </a>
+            <!-- /Logo -->
+            <div class="authentication-inner row m-0">
+                @yield('content')
+            </div> --}}
         </div>
     </div>
 
