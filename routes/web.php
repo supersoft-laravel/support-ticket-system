@@ -148,13 +148,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
             //Tickets Routes
             Route::resource('tickets', TicketController::class);
-            Route::get('tickets/status/{id}', [TicketController::class, 'updateStatus'])->name('tickets.status.update');
+            Route::put('tickets/status/{id}', [TicketController::class, 'updateStatus'])->name('tickets.status.update');
 
             Route::get('ticket-comments/create/{id}', [TicketController::class, 'createComment'])->name('ticket-comments.create');
             Route::post('ticket-comments/store/{id}', [TicketController::class, 'storeComment'])->name('ticket-comments.store');
 
-
-
+            Route::post('ticket-attachments/store/{id}', [TicketController::class, 'storeAttachment'])->name('ticket-attachments.store');
         });
     });
 

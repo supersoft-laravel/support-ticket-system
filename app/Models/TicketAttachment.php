@@ -8,4 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class TicketAttachment extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'ticket_id',
+        'user_id',
+        'company_id',
+        'file_path',
+        'file_name',
+        'file_type',
+        'file_size',
+    ];
 }

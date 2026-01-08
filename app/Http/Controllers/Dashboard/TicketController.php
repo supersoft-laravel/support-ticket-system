@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Ticket;
 use App\Models\TicketComment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
@@ -99,7 +100,7 @@ class TicketController extends Controller
 
     public function createComment(string $id)
     {
-        $this->authorize('create ticket');
+        $this->authorize('update ticket');
         try {
             $ticket = Ticket::findOrFail($id);
             return view('dashboard.tickets.create-comment', compact('ticket'));
@@ -111,7 +112,7 @@ class TicketController extends Controller
 
     public function storeComment(Request $request, string $id)
     {
-        $this->authorize('create ticket');
+        $this->authorize('update ticket');
         $validator = Validator::make($request->all(), [
             'comment' => 'required|string',
         ]);
@@ -133,6 +134,41 @@ class TicketController extends Controller
             return redirect()->route('dashboard.tickets.show', $ticket->id)->with('success', 'Comment added successfully!');
         } catch (\Throwable $th) {
             Log::error("Ticket Comment Store Failed:" . $th->getMessage());
+            return redirect()->back()->with('error', 'Something went wrong! Please try again later');
+        }
+    }
+
+    public function storeAttachment(Request $request, string $id)
+    {
+        $this->authorize('update ticket');
+        $validator = Validator::make($request->all(), [
+            'attachments' => 'required|array',
+            'attachments.*' => 'file|max_size',
+        ]);
+
+        if ($validator->fails()) {
+            Log::error("Ticket Attachment Validation Failed:" . json_encode($validator->errors()->all()));
+            return redirect()->back()->withErrors($validator)->withInput($request->all())->with('error', 'Validation Error!');
+        }
+
+        try {
+            $ticket = Ticket::findOrFail($id);
+
+            foreach ($request->file('attachments') as $file) {
+                $path = $file->store('ticket_attachments', 'public');
+
+                $ticket->ticketAttachments()->create([
+                    'file_path' => $path,
+                    'file_name' => $file->getClientOriginalName(),
+                    'file_type' => $file->getClientMimeType(),
+                    'file_size' => $file->getSize(),
+                    'user_id' => Auth::user()->id,
+                ]);
+            }
+
+            return redirect()->route('dashboard.tickets.show', $ticket->id)->with('success', 'Attachment uploaded successfully!');
+        } catch (\Throwable $th) {
+            Log::error("Ticket Attachment Store Failed:" . $th->getMessage());
             return redirect()->back()->with('error', 'Something went wrong! Please try again later');
         }
     }
